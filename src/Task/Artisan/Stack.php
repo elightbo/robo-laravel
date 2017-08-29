@@ -31,4 +31,19 @@ class Stack extends CommandStack
         $this->printTaskInfo("Running Artisan commands...");
         return parent::run();
     }
+
+	/**
+	 * Add cache flush commands to the stack
+	 * Do not forget to run()
+	 * @return $this
+	 */
+    public function addCacheFlush()
+    {
+	    return $this->exec('clear-compiled')
+	         ->exec('cache:clear')
+	         ->exec('config:clear')
+	         ->exec('route:clear')
+	         ->exec('view:clear');
+    }
+
 }

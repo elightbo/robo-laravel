@@ -12,4 +12,9 @@ trait loadShortcuts
     {
         return $this->taskArtisanStack()->exec($action)->run();
     }
+
+    protected function _artisanCacheFlush()
+    {
+	    return $this->taskArtisanStack()->addCacheFlush()->run();
+    }
 }

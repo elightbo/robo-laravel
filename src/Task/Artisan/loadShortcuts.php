@@ -1,5 +1,5 @@
 <?php
-namespace iMi\RoboLaravel\Task\Aristan;
+namespace iMi\RoboLaravel\Task\Artisan;
 
 trait loadShortcuts
 {

@@ -12,9 +12,11 @@ class Stack extends CommandStack
 	 */
 	public function __construct()
 	{
-		$this->executable = 'artisan';
+		$this->executable = null;
 		if (!$this->executable) {
-			$this->executable = $this->findExecutablePhar('artisan');
+			if (file_exists("artisan")) {
+				$this->executable = "php artisan";
+			}
 		}
 		if (!$this->executable) {
 			throw new TaskException(__CLASS__, "Artisan not found");

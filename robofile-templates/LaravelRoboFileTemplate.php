@@ -32,6 +32,7 @@ class RoboFile extends \Robo\Tasks {
 	 */
 	public function updateDependencies() {
 		$this->taskComposerInstall()->run();
+		$this->_exec('yarn');
 	}
 
     /**

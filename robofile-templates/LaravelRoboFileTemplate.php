@@ -12,6 +12,7 @@ class RoboFile extends \Robo\Tasks {
 		$config = $this->askSetup();
 		$this->_writeEnvFile( $config );
 		$this->_artisan( 'key:generate' );
+		$this->update();
 	}
 
 	/**
@@ -22,6 +23,7 @@ class RoboFile extends \Robo\Tasks {
 		     ->pull()->run();
 		$this->updateDependencies();
 		$this->_artisan( 'migrate' );
+		$this->updateAssets();
 		$this->cacheFlush();
 	}
 
@@ -30,7 +32,23 @@ class RoboFile extends \Robo\Tasks {
 	 */
 	public function updateDependencies() {
 		$this->taskComposerInstall()->run();
+		$this->_exec('yarn');
 	}
+
+    /**
+     * Update assets
+     */
+    public function updateAssets()
+    {
+        $this->taskGulpRun()->run();
+    }
+
+    /**
+     * Update Database only
+     */
+    public function dbUpdate() {
+        $this->_artisan( 'migrate' );
+    }
 
 	/**
 	 * Replace the database with a clean one
@@ -53,4 +71,19 @@ class RoboFile extends \Robo\Tasks {
 		$this->taskArtisanStack()->addUpdateIdeHelper()->run();
 	}
 
+    /**
+     * Shows the laravel log
+     */
+    public function logTail()
+    {
+        $this->_exec('tail -f storage/logs/laravel.log');
+    }
+
+    /**
+     * Seed the database
+     */
+    public function setupDev()
+    {
+        $this->_exec('php artisan db:seed --class=DatabaseSeeder');
+    }
 }

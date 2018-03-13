@@ -11,6 +11,7 @@ class RoboFile extends \Robo\Tasks {
 	public function setup() {
 		$config = $this->askSetup();
 		$this->_writeEnvFile( $config );
+		$this->updateDependencies();
 		$this->_artisan( 'key:generate' );
 		$this->update();
 	}

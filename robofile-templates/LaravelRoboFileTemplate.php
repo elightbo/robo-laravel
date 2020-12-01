@@ -1,9 +1,20 @@
 <?php
 
+use iMi\RoboPack\LoadTasks;
+use Robo\Tasks;
+
 // INSERT: IROBO_BOILERPLATE //
 
-class RoboFile extends \Robo\Tasks {
-	use \iMi\RoboPack\LoadTasks;
+/**
+ * @method _artisan(string $string)
+ * @method taskComposerInstall()
+ * @method _exec(string $string)
+ * @method _writeEnvFile($config)
+ * @method askSetup()
+ * @method stopOnFail()
+ */
+class RoboFile extends Tasks {
+	use LoadTasks;
 
     /**
      * It is important to stop execution if there was an error

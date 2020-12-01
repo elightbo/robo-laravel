@@ -27,12 +27,14 @@ class RoboFile extends \Robo\Tasks {
 	 * Update the project from VCS and everything else
 	 */
 	public function update() {
+        $this->_exec('php artisan down || true');
 		$this->taskGitStack()
 		     ->pull()->run();
 		$this->updateDependencies();
 		$this->_artisan( 'migrate' );
 		$this->updateAssets();
 		$this->cacheFlush();
+        $this->_artisan('up');
 	}
 
 	/**

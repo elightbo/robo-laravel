@@ -23,16 +23,28 @@ class RoboFile extends \Robo\Tasks {
 		$this->update();
 	}
 
-	/**
-	 * Update the project from VCS and everything else
-	 */
-	public function update() {
+    /**
+     * Update the project from VCS and everything else
+     *
+     * @param array $opts
+     */
+	public function update($opts = ['runGitPull' => true, 'replaceAndSeed' => false]) {
         $this->_exec('php artisan down || true');
-		$this->taskGitStack()
-		     ->pull()->run();
-		$this->updateDependencies();
-		$this->_artisan( 'migrate' );
-		$this->updateAssets();
+
+        if (isset($opts['runGitPull']) && $opts['runGitPull']) {
+            $this->taskGitStack()
+                ->pull()->run();
+        }
+
+        $this->updateDependencies();
+
+        if (isset($opts['replaceAndSeed']) && $opts['replaceAndSeed']) {
+            $this->dbReplace();
+        } else {
+            $this->dbUpdate();
+        }
+
+        $this->updateAssets();
 		$this->cacheFlush();
         $this->_artisan('up');
 	}

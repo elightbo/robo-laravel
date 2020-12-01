@@ -41,6 +41,8 @@ class RoboFile extends Tasks {
      */
 	public function update($opts = ['runGitPull' => true, 'replaceAndSeed' => false]) {
         $this->_exec('php artisan down || true');
+        $this->controlQueueServiceIfExisting('stop');
+        $this->_artisan('queue:restart');
 
         if (isset($opts['runGitPull']) && $opts['runGitPull']) {
             $this->taskGitStack()
@@ -57,6 +59,7 @@ class RoboFile extends Tasks {
 
         $this->updateAssets();
 		$this->cacheFlush();
+        $this->controlQueueServiceIfExisting('start');
         $this->_artisan('up');
 	}
 
@@ -125,5 +128,19 @@ class RoboFile extends Tasks {
     public function setupDev()
     {
         $this->_exec('php artisan db:seed --class=DatabaseSeeder');
+    }
+
+    /**
+     * Ability to start, stop and restart imi queue service if it exists.
+     *
+     * @param $command
+     */
+    private function controlQueueServiceIfExisting($command)
+    {
+        $path = explode('/', getcwd());
+        $serviceName = $path[sizeof($path) - 2] . '-queue.service';
+        if (file_exists('/etc/systemd/system/' . $serviceName)) {
+            $this->_exec('sudo /bin/systemctl ' . $command . ' ' . $serviceName);
+        }
     }
 }

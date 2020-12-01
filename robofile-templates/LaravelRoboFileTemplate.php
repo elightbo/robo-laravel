@@ -89,7 +89,15 @@ class RoboFile extends Tasks
      */
     public function updateAssets()
     {
-        $this->taskGulpRun()->run();
+        $this->_exec('yarn run prod');
+    }
+
+    /**
+     * Start frontend assets watcher
+     */
+    public function updateAssetsWatch()
+    {
+        $this->_exec('yarn run watch');
     }
 
     /**

@@ -54,8 +54,15 @@ class RoboFile extends \Robo\Tasks {
 	 */
 	public function updateDependencies() {
 		$this->taskComposerInstall()->run();
-		$this->_exec('yarn');
+		$this->updateFrontendDependencies();
 	}
+    /**
+     * Update frontend dependencies only
+     */
+    public function updateFrontendDependencies()
+    {
+        $this->_exec('yarn --frozen-lockfile');
+    }
 
     /**
      * Update assets
